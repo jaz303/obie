@@ -1,0 +1,22 @@
+* {
+	box-sizing: border-box;
+}
+
+#ob-error-report {
+	position: absolute;
+	top: 20px;
+	left: 20px;
+}
+
+#ob-error-report .ob-error-report-item {
+	background: #800000;
+	margin-bottom: 20px;
+	width: 640px;
+	color: white;
+	padding: 20px;
+	border-radius: 5px;
+}
+
+#ob-error-report .ob-error-report-item pre {
+	overflow: auto;
+}
