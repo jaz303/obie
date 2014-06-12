@@ -1,0 +1,9 @@
+{
+  "name": "obie",
+  "main": "index.htm",
+  "version": "0.0.1",
+  "devDependencies": {},
+  "dependencies": {
+    "signalkit": "~0.2.4"
+  }
+}
