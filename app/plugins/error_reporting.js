@@ -1,5 +1,9 @@
 var errorContainer 	= null;
 
+exports.preload = function() {
+	
+}
+
 exports.init = function() {
 
 	errorContainer = document.createElement('div');

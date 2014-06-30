@@ -5,10 +5,10 @@ function loadPlugin(mod) {
 	mod.init();
 }
 
-exports.init = function(window, document) {
+exports.init = function(window) {
 
 	global.window	= window;
-	global.document	= document;
+	global.document	= window.document;
 
 	//
 	//

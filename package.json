@@ -1,6 +1,10 @@
 {
   "name": "obie",
   "main": "index.htm",
+  "scripts": {
+  	"watch-scss": "scss --watch assets/main.scss",
+  	"watch": "npm run watch-scss"
+  },
   "version": "0.0.1",
   "devDependencies": {},
   "dependencies": {
