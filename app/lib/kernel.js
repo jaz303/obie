@@ -60,7 +60,8 @@ function spawn(taskDescriptor, parentTaskId) {
         return null;
     }
 
-    var tid = task.id = generateTaskId();
+    var tid = generateTaskId();
+    Object.defineProperty(task, 'id', { value: tid, writable: false });
 
     tasks[tid] = task;
     var entry = tasksInternal[tid] = {
