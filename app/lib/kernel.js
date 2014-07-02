@@ -71,14 +71,21 @@ function spawn(taskDescriptor, parentTaskId) {
         startTime       : Date.now()
     };
 
+    // Task has been created. Next step is initialisation.
+    // Task init may be asynchronous so we pass in a callback,
+    // which the task *must* call - if not, the task will be
+    // stuck in limbo.
     try {
-        task.init();
+        var initializingOnStack = true;
+        task.init(_taskInitialised);
+        initializingOnStack = false;
     } catch (e) {
 
         console.warn("error caught from Task::init(), tid = " + tid);
         console.warn("the task has not been spawned");
         console.error(e);
         
+        entry.state = k.TASK_STATUS_DEAD;
         tasks[tid] = tasksInternal[tid] = null;
         recycleTaskId(tid);
 
@@ -86,24 +93,50 @@ function spawn(taskDescriptor, parentTaskId) {
 
     }
 
-    if (parentTaskId) {
-        tasksInternal[parentTaskId].children.push(tid);
+    // Task calls this function when its initialisation is complete.
+    function _taskInitialised() {
+        
+        if (entry.state !== k.TASK_STATUS_INIT) {
+            console.warn("task initialisation callback called after initialisation failed!");
+            return false;
+        }
+
+        if (parentTaskId) {
+            tasksInternal[parentTaskId].children.push(tid);
+        }
+
+        if (initializingOnStack) {
+            nextTick(_start);
+        } else {
+            _start();
+        }
+
+        taskSpawned.emit(tid, task);
+
     }
 
-    nextTick(function() {
-        if (entry.state === k.TASK_STATUS_INIT) {
-            try {
-                entry.state = k.TASK_STATUS_RUNNING;
-                task.start();
-            } catch (e) {
-                console.warn("error caught from Task::start(), tid = " + tid);
-                console.warn("the task has not been killed");
-                console.error(e);
-            }
-        }
-    });
+    function _start() {
 
-    taskSpawned.emit(tid, task);
+        // Task has already been killed - nothing to do.
+        if (entry.state === k.TASK_STATUS_DEAD) {
+            return;
+        }
+
+        assert(entry.state === k.TASK_STATUS_INIT, "expected task state TASK_STATUS_INIT");
+
+        // set the task's status to running + call task's run() method.
+        // An exception raised in run() is not a fatal error and does not
+        // kill the task.
+        try {
+            entry.state = k.TASK_STATUS_RUNNING;
+            task.run();
+        } catch (e) {
+            console.warn("error caught from Task::start(), tid = " + tid);
+            console.warn("the task has not been killed");
+            console.error(e);
+        }
+
+    }
 
     return task;
 
