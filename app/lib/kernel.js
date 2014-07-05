@@ -73,13 +73,8 @@ function spawn(taskDescriptor, parentTaskId) {
     };
 
     // Task has been created. Next step is initialisation.
-    // Task init may be asynchronous so we pass in a callback,
-    // which the task *must* call - if not, the task will be
-    // stuck in limbo.
     try {
-        var initializingOnStack = true;
-        task.init(_taskInitialised);
-        initializingOnStack = false;
+        task.init();
     } catch (e) {
 
         console.warn("error caught from Task::init(), tid = " + tid);
@@ -94,27 +89,18 @@ function spawn(taskDescriptor, parentTaskId) {
 
     }
 
-    // Task calls this function when its initialisation is complete.
-    function _taskInitialised() {
-        
-        if (entry.state !== k.TASK_STATUS_INIT) {
-            console.warn("task initialisation callback called after initialisation failed!");
-            return false;
-        }
-
-        if (parentTaskId) {
-            tasksInternal[parentTaskId].children.push(tid);
-        }
-
-        if (initializingOnStack) {
-            nextTick(_start);
-        } else {
-            _start();
-        }
-
-        taskSpawned.emit(tid, task);
-
+    if (entry.state !== k.TASK_STATUS_INIT) {
+        console.warn("task initialisation callback called after initialisation failed!");
+        return false;
     }
+
+    if (parentTaskId) {
+        tasksInternal[parentTaskId].children.push(tid);
+    }
+
+    nextTick(_start);
+    taskSpawned.emit(tid, task);
+    return task;
 
     function _start() {
 
@@ -138,8 +124,6 @@ function spawn(taskDescriptor, parentTaskId) {
         }
 
     }
-
-    return task;
 
 }
 

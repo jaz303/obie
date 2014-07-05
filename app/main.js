@@ -1,6 +1,8 @@
 global.oblib = function(lib) { return require('./lib/' + lib); };
 global.obapi = function(api) { return require('./api/' + api); };
 
+var signals 		= oblib('signals');
+
 function loadPlugin(mod) {
 	mod.init();
 }
@@ -15,16 +17,15 @@ exports.init = function(window) {
 
 	loadPlugin(require('./plugins/error_reporting'));
 
-	var signals = oblib('signals');
-
 	signals.register('taskRegistered');
 	signals.register('taskSpawned');
 
-	throw new Error("broken broken!");
+	require('./tasks/Workspace');
+	require('./tasks/WorkspaceManager');
 
-	// var kernel = oblib('kernel');
+	var kernel = require('./lib/kernel');
 
-	// var wsm = kernel.spawn('obie.workspace-manager');
-	// TODO: present wsm.view to the view engine
+	var manager = kernel.spawn('obie.workspace-manager');
+	document.body.appendChild(manager.getView());
 	
 }

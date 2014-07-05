@@ -2,9 +2,17 @@ module.exports = Task;
 
 function Task() {}
 
-Task.prototype.__preinit = function() {}
+Task.prototype.__preinit = function() {
+	this._view = null;
+}
+
 Task.prototype.init = function(cb) { cb(); }
 Task.prototype.run = function() {}
+
+//
+//
+
+Task.prototype.getView = function() { return this._view; }
 
 //
 // Template methods for visible tasks
