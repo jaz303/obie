@@ -9,6 +9,10 @@ TaskBuilder.prototype.name = function(name) {
 	this._meta.name = name;
 }
 
+TaskBuilder.prototype.hidden = function() {
+	this._meta.hidden = true;
+}
+
 TaskBuilder.prototype.init = function(fun) {
 	this._proto.init = fun;
 }

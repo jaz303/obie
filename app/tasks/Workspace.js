@@ -1,4 +1,4 @@
-oblib('define_task')('obie.workspace', function(meta, proto) {
+oblib('define_task')('obie.workspace', function(task) {
 
 	task.init(function(cb) {
 
@@ -7,6 +7,8 @@ oblib('define_task')('obie.workspace', function(meta, proto) {
 		// TODO: create structure and assign to this.view
 
 	});
+
+	task.hidden();
 
 	task.message('addTrack', {
 		description: "Add a new track to the workspace",
