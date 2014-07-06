@@ -1,1 +1,76 @@
 @import 'reset.scss';
+
+$main_padding			: 8px ;
+$status_bar_height 		: 20px ;
+$status_bar_font_size	: 12px ;
+
+* {
+	box-sizing: border-box;
+}
+
+body {
+	font: 12px/1.2 Helvetica, Arial, sans-serif;
+}
+
+.ob-workspace-manager {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: #202020;
+
+	> .workspaces {
+		position: absolute;
+		top: $main_padding;
+		left: $main_padding;
+		right: $main_padding;
+		bottom: $main_padding + $status_bar_height + $main_padding;
+		background: #404040;
+	}
+
+	> .status-bar {
+		$button_spacing : 5px;
+
+		position: absolute;
+		bottom: $main_padding;
+		height: $status_bar_height;
+		left: $main_padding;
+		right: $main_padding;
+
+		.button {
+			display: block;
+			float: left;
+			font-size: $status_bar_font_size ;
+			line-height: 1;
+			padding: (($status_bar_height - $status_bar_font_size) / 2) 5px;
+			color: white;
+			text-decoration: none;
+
+			&.fixed-width {
+				padding-left: 0;
+				padding-right: 0;
+				text-align: center;
+			}
+		}
+
+		> .workspace-controls {
+			float: left;
+			.button { margin-right: $button_spacing; }
+			.add, .remove { width: $status_bar_height; }
+			.add { background: green; }
+			.remove { background: red; }
+		}
+
+		> .workspace-list {
+			float: left;
+			.button {
+				margin-right: $button_spacing;
+			}
+		}
+
+		> .accessories {
+			float: right;
+		}
+	}
+}

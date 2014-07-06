@@ -5,13 +5,30 @@ oblib('define_task')('obie.workspace-manager', function(t) {
 
 	t.init(function() {
 
-		this._view = document.createElement('div');
-		this._view.className = 'ob-workspace-manager';
+		this._loadViewFromTemplate(__dirname + '/WorkspaceManager.html');
 	
 	});
 
 	t.method('run', function() {
-		console.log("RUN WORKSPACE MANAGER!");
+		bind(this);
 	});
 
 });
+
+function bind(t) {
+
+	t.ui.btnAdd.addEventListener('click', function(evt) {
+		evt.preventDefault();
+		// stop prop?
+
+		console.log("ADD");
+	});
+
+	t.ui.btnRemove.addEventListener('click', function(evt) {
+		evt.preventDefault();
+		// stop prop?
+
+		console.log("REMOVE");
+	});
+
+}

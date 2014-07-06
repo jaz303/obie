@@ -44,3 +44,58 @@ q:before, q:after {
 table {
   border-collapse: collapse;
   border-spacing: 0; }
+
+* {
+  box-sizing: border-box; }
+
+body {
+  font: 12px/1.2 Helvetica, Arial, sans-serif; }
+
+.ob-workspace-manager {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #202020; }
+  .ob-workspace-manager > .workspaces {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    right: 8px;
+    bottom: 36px;
+    background: #404040; }
+  .ob-workspace-manager > .status-bar {
+    position: absolute;
+    bottom: 8px;
+    height: 20px;
+    left: 8px;
+    right: 8px; }
+    .ob-workspace-manager > .status-bar .button {
+      display: block;
+      float: left;
+      font-size: 12px;
+      line-height: 1;
+      padding: 4px 5px;
+      color: white;
+      text-decoration: none; }
+      .ob-workspace-manager > .status-bar .button.fixed-width {
+        padding-left: 0;
+        padding-right: 0;
+        text-align: center; }
+    .ob-workspace-manager > .status-bar > .workspace-controls {
+      float: left; }
+      .ob-workspace-manager > .status-bar > .workspace-controls .button {
+        margin-right: 5px; }
+      .ob-workspace-manager > .status-bar > .workspace-controls .add, .ob-workspace-manager > .status-bar > .workspace-controls .remove {
+        width: 20px; }
+      .ob-workspace-manager > .status-bar > .workspace-controls .add {
+        background: green; }
+      .ob-workspace-manager > .status-bar > .workspace-controls .remove {
+        background: red; }
+    .ob-workspace-manager > .status-bar > .workspace-list {
+      float: left; }
+      .ob-workspace-manager > .status-bar > .workspace-list .button {
+        margin-right: 5px; }
+    .ob-workspace-manager > .status-bar > .accessories {
+      float: right; }

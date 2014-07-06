@@ -132,7 +132,7 @@ function spawn(taskDescriptor, parentTaskId) {
 
 function assert(cond, msg) {
     if (!cond) {
-        console.error("Assertion failed");
+        console.error("!!! Kernel assertion failed !!!");
         console.error(msg);
         throw new Error("kernel assertion failed: " + msg);
     }
