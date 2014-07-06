@@ -6,7 +6,7 @@ Task.prototype.__preinit = function() {
 	this._view = null;
 }
 
-Task.prototype.init = function(cb) { cb(); }
+Task.prototype.init = function() {}
 Task.prototype.run = function() {}
 
 //
