@@ -9,7 +9,7 @@ var recycledTaskIds	= [];
 var nextTaskId		= 1;
 
 exports.spawn               = spawn;
-// exports.kill                = kill;
+exports.kill                = kill;
 // exports.getTaskById         = getTaskById;
 // exports.getTaskType         = getTaskType;
 // exports.send                = send;
@@ -22,12 +22,14 @@ exports.spawn               = spawn;
 //
 // Public interface
 
-function spawn(taskDescriptor, parentTaskId) {
+function spawn(taskType, parentTaskId) {
 
-    if (typeof taskDescriptor === 'string') {
-        taskDescriptor = registry.lookup(taskDescriptor);
+    if (typeof taskType !== 'string') {
+        console.error("[kernel] spawn() : task type must be a string");
+        return null;
     }
 
+    var taskDescriptor = registry.lookup(taskType);
     if (!taskDescriptor || typeof taskDescriptor.create !== 'function') {
         console.error("can't create task - invalid task descriptor");
         return null;
@@ -124,6 +126,63 @@ function spawn(taskDescriptor, parentTaskId) {
         }
 
     }
+
+}
+
+function kill(tid) {
+
+    var entry = tasksInternal[tid];
+    if (!entry)
+        return false;
+
+    //
+    // OK, task to kill is valid.
+    // First thing to do is kill all of it's children.
+
+    if (entry.children.length) {
+        entry.children.slice(0).forEach(function(child) {
+            kill(child);
+        });
+    }
+
+    // TODO: destroy connections!
+
+    //
+    // Now run the task's custom destroy handler
+
+    task = tasks[tid];
+
+    try {
+        task.destroy();
+    } catch (e) {
+        console.warn("error caught whilst killing task " + tid);
+        console.error(e);
+    }
+
+    // TODO: prevent task from receiving messages?
+    // // Prevent destroyed tasks from responding to new messages
+    // task.send = NO_OP;
+
+    //
+    // Housekeeping
+
+    entry.state = k.TASK_STATUS_DEAD;
+
+    tasks[tid] = tasksInternal[tid] = null;
+    recycleTaskId(tid);
+
+    if (entry.parentId) {
+        var parentInt = tasksInternal[entry.parentId];
+        parentInt.children.splice(parentInt.children.indexOf(tid), 1);
+        try {
+            tasks[entry.parentId].childKilled(tid);    
+        } catch (e) {
+            console.warn("error caught from Task::childKilled(), tid = " + tid);
+            console.error(e);
+        }
+    }
+
+    return true;
 
 }
 

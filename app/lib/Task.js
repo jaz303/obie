@@ -1,5 +1,7 @@
 module.exports = Task;
 
+var kernel = oblib('kernel');
+
 function Task() {}
 
 Task.prototype.__preinit = function() {
@@ -8,6 +10,11 @@ Task.prototype.__preinit = function() {
 
 Task.prototype.init = function() {}
 Task.prototype.run = function() {}
+Task.prototype.destroy = function() {}
+
+Task.prototype.spawn = function(taskType) {
+	return kernel.spawn(taskType, this.id);
+}
 
 //
 //
