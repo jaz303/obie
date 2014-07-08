@@ -26,6 +26,8 @@ Task.prototype.getView = function() {
 Task.prototype._loadViewFromTemplate = function(tpl) {
 	
 	this._view = obtpl(tpl);
+	this._view.addClass('ob-task');
+	this._view.__task = this;
 
 	var ui = this.ui = {};
 
