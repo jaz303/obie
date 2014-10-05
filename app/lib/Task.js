@@ -1,6 +1,10 @@
 module.exports = Task;
 
-var kernel = oblib('kernel');
+var kernel 	= oblib('kernel');
+
+var du 		= require('domutil');
+var terrier = require('terrier');
+var fs 		= require('fs');
 
 function Task() {}
 
@@ -24,38 +28,15 @@ Task.prototype.getView = function() {
 }
 
 Task.prototype._loadViewFromTemplate = function(tpl) {
-	
-	this._view = obtpl(tpl);
-	this._view.addClass('ob-task');
+
+	var instance = terrier(fs.readFileSync(tpl, 'utf8'));
+
+	this._view = instance.root;
 	this._view.__task = this;
 
-	var ui = this.ui = {};
+	du.addClass(this._view, 'ob-task');
 
-	function _addOne(k, el) {
-		if (k.substr(-2, 2) === '[]') {
-			k = k.slice(0, -2);
-			if (!(k in ui))
-				ui[k] = [];
-			if (!Array.isArray(ui[k]))
-				throw new Error("type mismatch - existing element for ui key '" + k + "' not plucked as array");
-			ui[k].push(el);
-		} else {
-			ui[k] = el;
-		}
-	}
-
-	var uiEls = this._view.querySelectorAll('[data-ui]');
-	for (var i = 0; i < uiEls.length; ++i) {
-		var el = uiEls[i];
-		var key = el.getAttribute('data-ui');
-		if (key.indexOf(' ') >= 0) {
-			key.trim().split(/\s+/).forEach(function(k) {
-				_addOne(k, el);
-			});
-		} else {
-			_addOne(key, el);
-		}
-	}
+	this.ui = instance;
 
 }
 

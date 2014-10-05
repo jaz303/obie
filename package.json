@@ -9,6 +9,7 @@
   "devDependencies": {},
   "dependencies": {
     "signalkit": "~0.2.4",
-    "domutil": "~0.3.2"
+    "domutil": "~0.3.2",
+    "terrier": "0.0.3"
   }
 }

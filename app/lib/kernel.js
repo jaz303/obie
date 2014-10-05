@@ -81,6 +81,7 @@ function spawn(taskType, parentTaskId) {
 
         console.warn("error caught from Task::init(), tid = " + tid);
         console.warn("the task has not been spawned");
+        throw e;
         console.error(e);
         
         entry.state = k.TASK_STATUS_DEAD;

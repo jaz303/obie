@@ -1,9 +1,6 @@
 global.oblib = function(lib) { return require('./lib/' + lib); };
 global.obapi = function(api) { return require('./api/' + api); };
 
-var domLoad = require('./lib/dom_loader');
-global.obtpl = function(tpl) { return domLoad(tpl); }
-
 var signals = oblib('signals');
 
 function loadPlugin(mod) {
